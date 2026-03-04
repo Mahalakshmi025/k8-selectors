@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  affinity:
+    nodeAffinity:
+     #soft rule
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1 #weight is a positive integer that represents the preference level for the rule. The scheduler will try to place the pod on a node that satisfies the rule with a higher weight. between 1-100 prefernces
+        preference:
+          matchExpressions:
+          - key: another-node-label-key
+            operator: In
+            values:
+            - another-node-label-value
+  containers:
+  - name: nginx
+    image: nginx:stable-perl
+  nodeSelector:
+    hardware: gpu
+  tolerations:
+  - key: "hardware" 
+    operator: "Equal"
+    value: "gpu"
+    effect: "NoSchedule"
